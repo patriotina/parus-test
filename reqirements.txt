@@ -1,0 +1,5 @@
+sqlalchemy
+flask
+#flask-mysql
+Flask-SQLAlchemy
+PyMySQL
