@@ -16,23 +16,6 @@ db.init_app(app)
 def hello():
 #    return 'Hello World!'
     return render_template('index.html')
-
-@app.route('/create', methods=['POST', 'GET'])
-def create():
-    if request.method == 'POST':
-        name = request.form['name']
-        description = request.form['description']
-        price = int(request.form['price'])
-
-        product = Products(name=name, description=description, price=price)
-        #try:
-        db.session.add(product)
-        db.session.commit()
-        return redirect('/')
-        #except:
-        #    return 'Error while adding data to db'
-    else:
-        return render_template('create.html')
     
 @app.route('/products')
 def getrpoducts():
@@ -75,8 +58,29 @@ def addprod():
         db.session.commit()
     
 
-    prods = db.session.execute(db.select(Products)).scalars()
+    prods = db.session.execute(db.select(Products).order_by(Products.name)).scalars()
     return render_template('addprod.html', stuff=prods)
+
+@app.route('/addprodm', methods=['POST', 'GET'])
+def addprodm():
+    prod = request.get_json()
+    print("hello from modal")
+    print(prod)
+
+    if request.method == 'POST':
+        name = prod['name']
+        description = prod['description']
+        price = prod['price']
+
+        print(name)
+        product = Products(name=name, description=description, price=price)
+        print(product)
+        #try:
+        db.session.add(product)
+        db.session.commit()
+
+    products = db.session.execute(db.select(Products).order_by(Products.name)).scalars()
+    return render_template('addprodm.html', stuff=products)
 
 @app.route('/addloc', methods=['POST', 'GET'])
 def addloc():
@@ -86,7 +90,7 @@ def addloc():
         db.session.add(location)
         db.session.commit()
     
-    locs = db.session.execute(db.select(Locations)).scalars()
+    locs = db.session.execute(db.select(Locations).order_by(Locations.name)).scalars()
     return render_template('addloc.html', stuff=locs)
 
 if __name__ == '__main__':

@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- кастомные стили -->
     <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
@@ -28,19 +31,16 @@
              id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="create">Создать</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="products">Товары</a>
+                    <a class="nav-link" href="/all">Главная</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="addprod">Добавить товар</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="addloc">Добавить локацию</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Добавить товар(М)</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Обо мне</a>

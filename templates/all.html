@@ -52,13 +52,70 @@
             </div>
         </div>
     {% endfor %}
+
 </div>
 
-
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+  
       
-      
-      
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="False">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Добавить товар модально</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="post">
+                <div class="mb-3">
+                    <input id="namef" placeholder="Наименование" type="text" name="name">
+                </div>
+                <div class="mb-3">
+                    <input id="descf" placeholder="Описание" type="text" name="description">
+                </div>
+                <div class="mb-3">
+                    <input id="pricef" placeholder="Цена" type="text" name="price">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="btn" type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
     </div>
-  </div>
+</div>
+       
+<script>
+    // let prod = {
+    //    name: name,
+    //    description: description,
+    //    price: price
+    //} 
+    document.querySelector('#btn').addEventListener("click", function() {
+        
+        fetch("/addprodm", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: document.getElementById('namef').value,
+                description: document.getElementById('descf').value,
+                price: document.getElementById('pricef').value
+            })
+        })
+        .then(response => response.text())
+        .then(//data => {
+            //document.querySelector("#jsonResult").innerText = JSON.stringify(data);
+            html => {
+                console.log(html);
+        })
+        .catch(error => console.error("Ошибка:", error));
+    });
+</script>
+ 
 
 {% endblock %}
