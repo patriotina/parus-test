@@ -1,69 +1,59 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Весь инвентарь
+Товар и локация
 {% endblock %}
 
 {% block content %}
-<h1>Весь инвентарь</h1>
+<h1>Товар и локация</h1>
 
 <div class="container text-center">
     <div class="row .bg-info-subtle text-info-emphasis fs-5 fw-semibold">
-        <div class="col-2 text-start">
-            Наименование
-        </div>
-        <div class="col-5 text-start">
-            Описание
+        <div class="col-1 text-start">
+            Id
         </div>
         <div class="col-2 text-start">
-            Локация
+            Товар
         </div>
         <div class="col-1">
-            Цена
+            ид Локация
         </div>
         <div class="col-1">
-            Остаток
-        </div>
-        <div class="col-1">
-            
+            +
         </div>
     </div>
     {% for thing in stuff %}
         <div class="row">
+            <div class="col-1 text-start">
+                p.id: {{ thing.Products.id }} 
+            </div>
             <div class="col-2 text-start">
                 {{ thing.Products.name }}
             </div>
-            <div class="col-4 text-start" >
-                {{ thing.Products.description }}
-            </div>
-            <div class="col-2 text-start">
-                {{ thing.Locations.name }}
+            <div class="col-1 text-start">
+                aaa
             </div>
             <div class="col-1">
-                {{ thing.Products.price }}
-            </div>
-            <div class="col-1">
-                {{ thing.Inventory.quantity }}
-            </div>
-            <div class="col-2">
-                <a class="btn btn-outline-primary" href="/additem/{{ thing.Inventory.id }}">+</a>
-           
-                <a class="btn btn-outline-primary" href="/delitem/{{ thing.Inventory.id }}">-</a>
-
-                <a class="btn btn-outline-primary" href="/removefromstore/{{ thing.Inventory.id }}">Del</a>
+                <a class="btn btn-outline-primary" href="/getfreelocations/{{ thing.Products.id }}">+</a>
             </div>
 
         </div>
     {% endfor %}
 
-</div>
+        Locations
+        <div class="col-6">
+            [ loc.Locations.id ]  loc.Locations.name -  loc.Inventory.location_id  -  loc.Inventory.product_id 
+        </div>
+    {% for loc in stores %}
+     <div class="row">
+        <div class="col-6">
+            [i.id {{ loc.Locations.id }}] {{ loc.Locations.name}} (Inventory.lid: {{ loc.Inventory.location_id }}) - {{ loc.Inventory.product_id }} - {{ loc.Inventory.id }}
+        </div>
+     </div>
+    {% endfor %}
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Добавить на склад
-</button>
-<a class="btn btn-outline-primary" href="/addtostore">Добавить</a>
-  
-      
+</div>
+ 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="False">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -76,11 +66,13 @@
                 <div class="mb-3">
                     <input id="namef" placeholder="Наименование" type="text" name="name">
                 </div>
-                <div class="mb-3">
-                    <input id="descf" placeholder="Описание" type="text" name="description">
-                </div>
-                <div class="mb-3">
-                    <input id="pricef" placeholder="Цена" type="text" name="price">
+                <div class="input-group mb-3">
+                    <select class="form-select" id="inputGroupSelect" aria-label="Example select with button addon">
+                        {% for loc in stores %}
+                            <option value="1">{{ loc.Locations.name }} [{{ loc.Locations.id }}]</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-outline-secondary" type="button">Button</button>
                 </div>
             </form>
         </div>
@@ -91,7 +83,7 @@
       </div>
     </div>
 </div>
-       
+
 <script>
     // let prod = {
     //    name: name,
@@ -100,15 +92,13 @@
     //} 
     document.querySelector('#btn').addEventListener("click", function() {
         
-        fetch("/addprodm", {
+        fetch("/getfreelocations", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                name: document.getElementById('namef').value,
-                description: document.getElementById('descf').value,
-                price: document.getElementById('pricef').value
+                pid: document.getElementById('product_id').value,
             })
         })
         .then(response => response.text())

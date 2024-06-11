@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Товар и локация
+{% endblock %}
+
+{% block content %}
+<h1>Товар для добавления в новую локацию</h1>
+
+<div class="container text-start">
+
+    <div class="row">
+        
+        <div class=" text-start">
+            Склад/Локация:
+            <select>
+                {% for location in stores %}
+                    <option value="{{ location.Locations.id }}">
+                        {{ location.Locations.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        
+        <div class=" text-start">
+            Количество товара:
+            <input type="number">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <a class="btn btn-outline-primary" href="/addtostore/1" data-bs-toggle="modal" data-bs-target="#exampleModal">+</a>
+        </div>
+    </div>
+
+
+
+</div>
+
+<form>
+
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Склад/магазин:</label>
+      <select class="form-control" id="exampleFormControlSelect1">
+        {% for location in stores %}
+                    <option value="{{ location.Locations.id }}">
+                        {{ location.Locations.name }}
+                    </option>
+                {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+        <label for="amountStuff">Количество товара</label>
+        <input type="number" class="form-control" id="amountStuff" aria-describedby="amountStuffHelp" placeholder="Number">
+        <small id="amountStuffHelp" class="form-text text-muted">Количество товара на выбранном складе/магазине</small>
+      </div>
+  </form>
+
+
+
+
+
+{% endblock %}

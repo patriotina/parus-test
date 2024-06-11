@@ -1,1 +1,4 @@
 venv/
+drawdb/
+.vscode/
+__pycache__/
