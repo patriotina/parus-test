@@ -97,33 +97,23 @@ from sqlalchemy import text, and_
 
 @app.route('/addtostore', methods=['POST', 'GET'])
 def addtostore():
-    # if request.method == 'POST':
-    #     name = request.form['name']
-    #     inventory = Inventory(prod_id, loc_id)
-    #     location = Locations(name=name)
-    #     db.session.add(location)
-    #     db.session.commit()
-    
-    #inventory = db.session.execute(db.select(Inventory, Products).join(Inventory, Inventory.product_id == Products.id, isouter=True).where(Inventory.location_id == None))
     inventory = db.session.execute(db.select(Products))
-#    locs = db.session.execute(db.select(Locations, Inventory).join(Inventory, isouter=True).where(Inventory.location_id == None, Inventory.product_id != 2))
-    
- #   prods = db.session.query(Inventory).filter(Inventory.product_id == 2).subquery()
- #   locs = db.select(prods, Locations).join(prods, isouter=True)
- #   locsq = db.session.execute(locs)
     locs = db.session.execute(db.select(Inventory, Locations).join(Inventory, and_(Inventory.location_id == Locations.id, Inventory.product_id == 12), isouter=True).where(Inventory.product_id == None))
-    stmt = text("select * from locations l left outer join inventory i on (l.id = i.location_id and i.product_id == 2) where i.location_id is null")
-    #stmt = text('SELECT id, location_id, product_id FROM Inventory WHERE product_id == 2 INNER JOIN ')
-    # locs = db.session.execute(stmt)
-    # for l in locs:
-    #     print(l)
     return render_template('addtostore.html', stuff=inventory, stores=locs)
     
-@app.route('/getfreelocations/<int:pid>')
+@app.route('/getfreelocations/<int:pid>', methods=['POST', 'GET'])
 def addtostoreloc(pid):
-#    if request.method == 'POST':
-    locs = db.session.execute(db.select(Inventory, Locations).join(Inventory, and_(Inventory.location_id == Locations.id, Inventory.product_id == pid), isouter=True).where(Inventory.product_id == None))
-    return render_template('freelocations.html', stores = locs)
+    if request.method == 'GET':
+        locs = db.session.execute(db.select(Inventory, Locations).join(Inventory, and_(Inventory.location_id == Locations.id, Inventory.product_id == pid), isouter=True).where(Inventory.product_id == None))
+        return render_template('freelocations.html', stores = locs, pid=pid)
+    else:
+        loc_id = request.form['location_id']
+        amount = request.form['amount']
+        inventory = Inventory(product_id=pid, location_id=loc_id, quantity=amount)
+        #try:
+        db.session.add(inventory)
+        db.session.commit()
+        return redirect('/all')
 
 if __name__ == '__main__':
     app.run(debug=True)
