@@ -14,8 +14,8 @@ db.init_app(app)
 
 @app.route('/')
 def hello():
-#    return 'Hello World!'
-    return render_template('index.html')
+#    return render_template('index.html')
+    return redirect('/all')
     
 @app.route('/products')
 def getrpoducts():
@@ -61,6 +61,16 @@ def addprod():
     prods = db.session.execute(db.select(Products).order_by(Products.name)).scalars()
     return render_template('addprod.html', stuff=prods)
 
+@app.route('/delproduct/<int:prodid>', methods=['POST', 'GET'])
+def delproduct(prodid):
+    if request.method != 'POST':
+        del_product = db.session.query(Products).filter_by(id = prodid).one()
+        print(del_product)
+        db.session.delete(del_product)
+        db.session.commit()
+
+    return redirect('/addprod')
+
 @app.route('/addprodm', methods=['POST', 'GET'])
 def addprodm():
     prod = request.get_json()
@@ -92,6 +102,37 @@ def addloc():
     
     locs = db.session.execute(db.select(Locations).order_by(Locations.name)).scalars()
     return render_template('addloc.html', stuff=locs)
+
+@app.route('/dellocation/<int:locid>', methods=['POST', 'GET'])
+def dellocation(locid):
+    if request.method != 'POST':
+        del_location = db.session.query(Locations).filter_by(id = locid).one()
+        print(del_location)
+        db.session.delete(del_location)
+        db.session.commit()
+
+    return redirect('/addloc')
+
+
+@app.route('/addlocationmodal', methods=['POST', 'GET'])
+def addlocationsm():
+    prod = request.get_json()
+    print("hello from adding location modal")
+    print(prod)
+
+    if request.method == 'POST':
+        name = prod['name']
+
+        print(name)
+        new_location = Locations(name=name)
+        print(new_location)
+        #try:
+        db.session.add(new_location)
+        db.session.commit()
+
+    all_locations = db.session.execute(db.select(Locations).order_by(Locations.name)).scalars()
+    return render_template('addlocationsm.html', stuff=all_locations)
+
 
 from sqlalchemy import text, and_
 

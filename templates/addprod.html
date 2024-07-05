@@ -26,6 +26,9 @@
                     <button class="btn btn-success" type="submit">Добавить</button>
                 </div>
             </form>
+            <div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Добавить товар (Модально)</a>
+            </div>
         </div>
         <div class="col-9">
 
@@ -33,6 +36,9 @@
             <div id="prodlist" class="container ">
                 {% for thing in stuff %}
                     <div class="row">
+                        <div class="col-1 text-start">
+                            {{ thing.id }}
+                        </div>
                         <div class="col-2 text-start">
                             {{ thing.name }}
                         </div>
@@ -41,6 +47,9 @@
                         </div>
                         <div class="col-1">
                             {{ thing.price }}
+                        </div>
+                        <div class="col-1 text-start">
+                            <a href="/delproduct/{{ thing.id }}">Del</a>
                         </div>
                     </div>
                 {% endfor %}
